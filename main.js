@@ -4,7 +4,7 @@ const coursePrice = document.querySelector('#coursePrice');
 const courseDescription = document.querySelector('#courseDescription');
 const courseCapacity = document.querySelector('#courseCapacity');
 const addBtn = document.querySelector('#click');
-
+const clearBtn = document.querySelector('.clear');
 // error messages
 const invalidValueName = document.querySelector('.invalid-value.name');
 const invalidValueCategory = document.querySelector('.invalid-value.category');
@@ -12,6 +12,7 @@ const invalidValuePrice = document.querySelector('.invalid-value.price');
 const invalidValueDescription = document.querySelector('.invalid-value.description');
 const invalidValueCapacity = document.querySelector('.invalid-value.capacity');
 const invalidValue = document.querySelector('.invalid-value');
+const input= document.querySelector('.inputs');
 let courses = [];
 
 // when refresh the page the code of next block will guarantee save data stored in local storage and display it in table
@@ -35,7 +36,7 @@ addBtn.addEventListener('click', (e) => {
     if (!namePattern.test(courseName.value)) {
         invalidValueName.textContent = "Ensure it starts with an uppercase letter followed by 2-10 lowercase letters.";
         invalidValueName.classList.remove('d-none');
-        courseCategory.classList.add('is-invalid');
+        courseName.classList.add('is-invalid');
     } else {
         invalidValueName.classList.add('d-none');
         courseName.classList.remove('is-invalid');
@@ -104,7 +105,23 @@ addBtn.addEventListener('click', (e) => {
             icon: "success"
         });
     }
+  
 });
+clearBtn.addEventListener('click', () => {
+
+    invalidValueName.classList.add('d-none');
+    invalidValueCategory.classList.add('d-none');
+    invalidValuePrice.classList.add('d-none');
+    invalidValueDescription.classList.add('d-none');
+    invalidValueCapacity.classList.add('d-none');
+
+    courseName.classList.remove('is-invalid', 'is-valid');
+    courseCategory.classList.remove('is-invalid', 'is-valid');
+    coursePrice.classList.remove('is-invalid', 'is-valid');
+    courseDescription.classList.remove('is-invalid', 'is-valid');
+    courseCapacity.classList.remove('is-invalid', 'is-valid');
+});
+
 
 function displayCourses() {
     const result = courses.map((course, index) => {
