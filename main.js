@@ -6,6 +6,7 @@ const courseCapacity = document.querySelector('#courseCapacity');
 const addBtn = document.querySelector('#click');
 const clearBtn = document.querySelector('.clear');
 const deleteBtn = document.querySelector('#deleteBtn');
+const search = document.querySelector('#search');
 // error messages
 const invalidValueName = document.querySelector('.invalid-value.name');
 const invalidValueCategory = document.querySelector('.invalid-value.category');
@@ -13,7 +14,7 @@ const invalidValuePrice = document.querySelector('.invalid-value.price');
 const invalidValueDescription = document.querySelector('.invalid-value.description');
 const invalidValueCapacity = document.querySelector('.invalid-value.capacity');
 const invalidValue = document.querySelector('.invalid-value');
-const input= document.querySelector('.inputs');
+const input = document.querySelector('.inputs');
 let courses = [];
 
 // when refresh the page the code of next block will guarantee save data stored in local storage and display it in table
@@ -22,7 +23,7 @@ if (localStorage.getItem("courses") != null) {
     displayCourses();
 }
 
-// set values in object to create courses array and set items from FormInputs to local storage
+// add course 
 addBtn.addEventListener('click', (e) => {
     e.preventDefault();
 
@@ -85,7 +86,7 @@ addBtn.addEventListener('click', (e) => {
         courseCapacity.classList.add('is-valid');
     }
 
-
+    // set values in object to create courses array and set items from FormInputs to local storage
     if (namePattern.test(courseName.value) && categoryPattern.test(courseCategory.value) && pricePattern.test(coursePrice.value) &&
         descriptionPattern.test(courseDescription.value) && capacityPattern.test(courseCapacity.value)) {
         const course = {
@@ -106,8 +107,9 @@ addBtn.addEventListener('click', (e) => {
             icon: "success"
         });
     }
-  
+
 });
+//clear data
 clearBtn.addEventListener('click', () => {
 
     invalidValueName.classList.add('d-none');
@@ -123,7 +125,7 @@ clearBtn.addEventListener('click', () => {
     courseCapacity.classList.remove('is-invalid', 'is-valid');
 });
 
-
+//displayCourses
 function displayCourses() {
     const result = courses.map((course, index) => {
         return `
@@ -140,7 +142,8 @@ function displayCourses() {
     }).join('');
     document.querySelector('#data').innerHTML = result;
 }
- function deleteCourse(index){
+//delete course
+function deleteCourse(index) {
     Swal.fire({
         title: 'Are you sure?',
         text: "You won't be able to revert this!",
@@ -150,7 +153,7 @@ function displayCourses() {
         cancelButtonColor: '#d33',
         confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
-        if (result.isConfirmed) { 
+        if (result.isConfirmed) {
             courses.splice(index, 1);
             localStorage.setItem("courses", JSON.stringify(courses));
             displayCourses();
@@ -161,8 +164,9 @@ function displayCourses() {
             )
         }
     })
- }
- deleteBtn.addEventListener('click',()=>{
+}
+//delete all courses
+deleteBtn.addEventListener('click', () => {
     Swal.fire({
         title: 'Are you sure?',
         text: "You won't be able to revert this!",
@@ -172,7 +176,7 @@ function displayCourses() {
         cancelButtonColor: '#d33',
         confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
-        if (result.isConfirmed) { 
+        if (result.isConfirmed) {
             courses = [];
             localStorage.setItem("courses", JSON.stringify(courses));
             displayCourses();
@@ -184,4 +188,32 @@ function displayCourses() {
         }
     })
 
- });
+});
+//search
+search.addEventListener("input", (e) => {
+    e.preventDefault();
+    const value = search.value.toLowerCase();
+
+    const coursesResult = courses.filter((course) => {
+        const name = course.name.toLowerCase();
+        return name.includes(value);
+    });
+
+    const result = coursesResult.map((course, index) => {
+        return `
+        <tr>
+            <td>${index}</td>
+            <td>${course.name}</td>
+            <td>${course.category}</td>
+            <td>${course.price}</td>
+            <td>${course.description}</td>
+            <td>${course.capacity}</td>
+            <td>
+                <button class='btn btn-danger' onclick='deleteCourse(${index})'>delete</button>
+            </td>
+        </tr>
+        `;
+    }).join("");
+
+    document.querySelector("#data").innerHTML = result;
+});
