@@ -5,6 +5,7 @@ const courseDescription = document.querySelector('#courseDescription');
 const courseCapacity = document.querySelector('#courseCapacity');
 const addBtn = document.querySelector('#click');
 const clearBtn = document.querySelector('.clear');
+const deleteBtn = document.querySelector('#deleteBtn');
 // error messages
 const invalidValueName = document.querySelector('.invalid-value.name');
 const invalidValueCategory = document.querySelector('.invalid-value.category');
@@ -133,8 +134,54 @@ function displayCourses() {
         <td>${course.price}</td>
         <td>${course.description}</td>
         <td>${course.capacity}</td>
+        <td><button class="btn btn-danger" onclick="deleteCourse(${index})">Delete</button></td>
         </tr>
         `;
     }).join('');
     document.querySelector('#data').innerHTML = result;
 }
+ function deleteCourse(index){
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+        if (result.isConfirmed) { 
+            courses.splice(index, 1);
+            localStorage.setItem("courses", JSON.stringify(courses));
+            displayCourses();
+            Swal.fire(
+                'Deleted!',
+                'Your course has been deleted.',
+                'success'
+            )
+        }
+    })
+ }
+ deleteBtn.addEventListener('click',()=>{
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+        if (result.isConfirmed) { 
+            courses = [];
+            localStorage.setItem("courses", JSON.stringify(courses));
+            displayCourses();
+            Swal.fire(
+                'Deleted!',
+                'Your course has been deleted.',
+                'success'
+            )
+        }
+    })
+
+ });
