@@ -15,32 +15,28 @@
 
 <body>
 
-    <div class="add-course">
+    <div class="add-product">
         <div class="container">
             <h1>CRUD System</h1>
             <form action="">
                 <div class="mb-3">
-                    <label for="">course name</label>
-                    <input class="inputs form-control" type="text" placeholder="cource name" id="courseName">
+                    <label for="">Product name</label>
+                    <input class="inputs form-control" type="text" placeholder="Product name" id="productName">
                     <p class="invalid-value name text-danger d-none"></p>
                 </div>
-                <label for="">course category</label>
-                <input class="inputs form-control" type="text" placeholder="cource category" id="courseCategory">
+                <label for="">Product category</label>
+                <input class="inputs form-control" type="text" placeholder="Product category" id="productCategory">
                 <p class="invalid-value category text-danger d-none"></p>
     
-                <label for="">course price</label>
-                <input class="inputs form-control" type="number" placeholder="cource price" id="coursePrice">
+                <label for="">Product price</label>
+                <input class="inputs form-control" type="number" placeholder="Product price" id="productPrice">
                 <p class="invalid-value price text-danger d-none"></p>
     
-                <label for="">course description</label>
-                <textarea class="inputs form-control" placeholder="course description" id="courseDescription"></textarea>
+                <label for="">Product description</label>
+                <textarea class="inputs form-control" placeholder="Product description" id="productDescription"></textarea>
                 <p class="invalid-value description text-danger d-none"></p>
-    
-                <label for="">course capacity</label>
-                <input class="inputs form-control" type="number" placeholder="cource capacity" id="courseCapacity">
-                <p class="invalid-value capacity text-danger d-none"></p>
-    
-                <input type="submit" value="Add Course" class="btn btn-outline-secondary mt-3" id="click" />
+       
+                <button type="submit" class="btn btn-outline-secondary mt-3" id="addProudct">Add product</button>
                 <button class="btn btn-outline-secondary mt-3 clear" type="reset">clear</button>
             </form>
         </div>
@@ -55,7 +51,7 @@
                         <th>category</th>
                         <th>price</th>
                         <th>description</th>
-                        <th>capacity</th>
+                        <th>update</th>
                         <th>action</th>
                       
                     </tr>

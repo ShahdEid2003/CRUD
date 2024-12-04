@@ -1,9 +1,9 @@
-const courseName = document.querySelector('#courseName');
-const courseCategory = document.querySelector('#courseCategory');
-const coursePrice = document.querySelector('#coursePrice');
-const courseDescription = document.querySelector('#courseDescription');
-const courseCapacity = document.querySelector('#courseCapacity');
-const addBtn = document.querySelector('#click');
+const productName = document.querySelector('#productName');
+const productCategory = document.querySelector('#productCategory');
+const productPrice = document.querySelector('#productPrice');
+const productDescription = document.querySelector('#productDescription');
+
+const addBtn = document.querySelector('#addProudct');
 const clearBtn = document.querySelector('.clear');
 const deleteBtn = document.querySelector('#deleteBtn');
 const search = document.querySelector('#search');
@@ -12,103 +12,112 @@ const invalidValueName = document.querySelector('.invalid-value.name');
 const invalidValueCategory = document.querySelector('.invalid-value.category');
 const invalidValuePrice = document.querySelector('.invalid-value.price');
 const invalidValueDescription = document.querySelector('.invalid-value.description');
-const invalidValueCapacity = document.querySelector('.invalid-value.capacity');
+
 const invalidValue = document.querySelector('.invalid-value');
 const input = document.querySelector('.inputs');
-let courses = [];
+let products = [];
 
 // when refresh the page the code of next block will guarantee save data stored in local storage and display it in table
-if (localStorage.getItem("courses") != null) {
-    courses = JSON.parse(localStorage.getItem("courses"));
-    displayCourses();
+if (localStorage.getItem("products") != null) {
+    products = JSON.parse(localStorage.getItem("products"));
+    displayproducts();
 }
 
-// add course 
+// add product and validation
 addBtn.addEventListener('click', (e) => {
     e.preventDefault();
-
+    const index = addBtn.getAttribute("data-index");
     // patterns 
     const namePattern = /^[A-Z][a-z]{2,10}$/;
     const categoryPattern = /^[A-Za-z ]{3,20}$/;
     const pricePattern = /^[1-9][0-9]*$/;
-    const descriptionPattern = /^.{10,50}$/;
-    const capacityPattern = /^[1-9][0-9]{0,2}$/;
+    const descriptionPattern = /^.{5,50}$/;
 
     // validation 
-    if (!namePattern.test(courseName.value)) {
+    if (!namePattern.test(productName.value)) {
         invalidValueName.textContent = "Ensure it starts with an uppercase letter followed by 2-10 lowercase letters.";
         invalidValueName.classList.remove('d-none');
-        courseName.classList.add('is-invalid');
+        productName.classList.add('is-invalid');
     } else {
         invalidValueName.classList.add('d-none');
-        courseName.classList.remove('is-invalid');
-        courseName.classList.add('is-valid');
+        productName.classList.remove('is-invalid');
+        productName.classList.add('is-valid');
 
     }
 
-    if (!categoryPattern.test(courseCategory.value)) {
-        invalidValueCategory.textContent = "Invalid course category. Use 3-20 alphabetic characters only.";
+    if (!categoryPattern.test(productCategory.value)) {
+        invalidValueCategory.textContent = "Invalid product category. Use 3-20 alphabetic characters only.";
         invalidValueCategory.classList.remove('d-none');
-        courseCategory.classList.add('is-invalid');
+        productCategory.classList.add('is-invalid');
     } else {
         invalidValueCategory.classList.add('d-none');
-        courseCategory.classList.remove('is-invalid');
-        courseCategory.classList.add('is-valid');
+        productCategory.classList.remove('is-invalid');
+        productCategory.classList.add('is-valid');
     }
 
-    if (!pricePattern.test(coursePrice.value)) {
-        invalidValuePrice.textContent = "Invalid course price. Enter a positive number.";
+    if (!pricePattern.test(productPrice.value)) {
+        invalidValuePrice.textContent = "Invalid product price. Enter a positive number.";
         invalidValuePrice.classList.remove('d-none');
-        coursePrice.classList.add('is-invalid');
+        productPrice.classList.add('is-invalid');
     } else {
         invalidValuePrice.classList.add('d-none');
-        coursePrice.classList.remove('is-invalid');
-        coursePrice.classList.add('is-valid');
+        productPrice.classList.remove('is-invalid');
+        productPrice.classList.add('is-valid');
     }
 
-    if (!descriptionPattern.test(courseDescription.value)) {
-        invalidValueDescription.textContent = "Invalid description. It must be between 10-200 characters.";
+    if (!descriptionPattern.test(productDescription.value)) {
+        invalidValueDescription.textContent = "Invalid description. It must be between 5-50 characters.";
         invalidValueDescription.classList.remove('d-none');
-        courseDescription.classList.add('is-invalid');
+        productDescription.classList.add('is-invalid');
     } else {
         invalidValueDescription.classList.add('d-none');
-        courseDescription.classList.remove('is-invalid');
-        courseDescription.classList.add('is-valid');
+        productDescription.classList.remove('is-invalid');
+        productDescription.classList.add('is-valid');
     }
 
-    if (!capacityPattern.test(courseCapacity.value)) {
-        invalidValueCapacity.textContent = "Invalid capacity. Enter a number between 1 and 999.";
-        invalidValueCapacity.classList.remove('d-none');
-        courseCapacity.classList.add('is-invalid');
-    } else {
-        invalidValueCapacity.classList.add('d-none');
-        courseCapacity.classList.remove('is-invalid');
-        courseCapacity.classList.add('is-valid');
-    }
-
-    // set values in object to create courses array and set items from FormInputs to local storage
-    if (namePattern.test(courseName.value) && categoryPattern.test(courseCategory.value) && pricePattern.test(coursePrice.value) &&
-        descriptionPattern.test(courseDescription.value) && capacityPattern.test(courseCapacity.value)) {
-        const course = {
-            name: courseName.value,
-            category: courseCategory.value,
-            price: coursePrice.value,
-            description: courseDescription.value,
-            capacity: courseCapacity.value,
-        };
-
-        courses.push(course);
-        localStorage.setItem("courses", JSON.stringify(courses));
-        displayCourses();
-
-        Swal.fire({
-            title: "Good job!",
-            text: "Course added!",
-            icon: "success"
-        });
+    if (namePattern.test(productName.value) && categoryPattern.test(productCategory.value) && pricePattern.test(productPrice.value) && descriptionPattern.test(productDescription.value)) {
+        addProudcts(index);
     }
 
 });
+function addProudcts(index) {
+    // set values in object to create products array and set items from FormInputs to local storage
+    if (index !== null) {
+
+        products[index] = {
+            name: productName.value,
+            category: productCategory.value,
+            price: productPrice.value,
+            description: productDescription.value,
+        };
+        addBtn.removeAttribute("data-index");
+        addBtn.textContent = "Add Product";
+        addBtn.classList.remove("btn-warning");
+
+        Swal.fire({
+            icon: "success",
+            title: "Product Updated",
+            text: "Your product has been successfully updated!",
+        });
+    } else {
+
+        products.push({
+            name: productName.value,
+            category: productCategory.value,
+            price: productPrice.value,
+            description: productDescription.value,
+        });
+
+        Swal.fire({
+            icon: "success",
+            title: "Product Added",
+            text: "Your product has been successfully added!",
+        });
+    }
+    localStorage.setItem("products", JSON.stringify(products));
+    displayproducts();
+}
+
 //clear data
 clearBtn.addEventListener('click', () => {
 
@@ -116,34 +125,36 @@ clearBtn.addEventListener('click', () => {
     invalidValueCategory.classList.add('d-none');
     invalidValuePrice.classList.add('d-none');
     invalidValueDescription.classList.add('d-none');
-    invalidValueCapacity.classList.add('d-none');
 
-    courseName.classList.remove('is-invalid', 'is-valid');
-    courseCategory.classList.remove('is-invalid', 'is-valid');
-    coursePrice.classList.remove('is-invalid', 'is-valid');
-    courseDescription.classList.remove('is-invalid', 'is-valid');
-    courseCapacity.classList.remove('is-invalid', 'is-valid');
+
+    productName.classList.remove('is-invalid', 'is-valid');
+    productCategory.classList.remove('is-invalid', 'is-valid');
+    productPrice.classList.remove('is-invalid', 'is-valid');
+    productDescription.classList.remove('is-invalid', 'is-valid');
+
 });
 
-//displayCourses
-function displayCourses() {
-    const result = courses.map((course, index) => {
+//displayproducts
+function displayproducts() {
+    const result = products.map((product, index) => {
         return `
         <tr>
         <td>${index}</td>
-        <td>${course.name}</td>
-        <td>${course.category}</td>
-        <td>${course.price}</td>
-        <td>${course.description}</td>
-        <td>${course.capacity}</td>
-        <td><button class="btn btn-danger" onclick="deleteCourse(${index})">Delete</button></td>
+        <td>${product.name}</td>
+        <td>${product.category}</td>
+        <td>${product.price}</td>
+        <td>${product.description}</td>
+        <td>            
+            <button class="btn btn-warning" onclick="editProduct(${index})">Update</button> 
+        </td>
+        <td><button class="btn btn-danger" onclick="deleteproduct(${index})">Delete</button></td>
         </tr>
         `;
     }).join('');
     document.querySelector('#data').innerHTML = result;
 }
-//delete course
-function deleteCourse(index) {
+//delete product
+function deleteproduct(index) {
     Swal.fire({
         title: 'Are you sure?',
         text: "You won't be able to revert this!",
@@ -154,18 +165,18 @@ function deleteCourse(index) {
         confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
         if (result.isConfirmed) {
-            courses.splice(index, 1);
-            localStorage.setItem("courses", JSON.stringify(courses));
-            displayCourses();
+            products.splice(index, 1);
+            localStorage.setItem("products", JSON.stringify(products));
+            displayproducts();
             Swal.fire(
                 'Deleted!',
-                'Your course has been deleted.',
+                'Your product has been deleted.',
                 'success'
             )
         }
     })
 }
-//delete all courses
+//delete all products
 deleteBtn.addEventListener('click', () => {
     Swal.fire({
         title: 'Are you sure?',
@@ -177,12 +188,12 @@ deleteBtn.addEventListener('click', () => {
         confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
         if (result.isConfirmed) {
-            courses = [];
-            localStorage.setItem("courses", JSON.stringify(courses));
-            displayCourses();
+            products = [];
+            localStorage.setItem("products", JSON.stringify(products));
+            displayproducts();
             Swal.fire(
                 'Deleted!',
-                'Your course has been deleted.',
+                'Your product has been deleted.',
                 'success'
             )
         }
@@ -194,22 +205,24 @@ search.addEventListener("input", (e) => {
     e.preventDefault();
     const value = search.value.toLowerCase();
 
-    const coursesResult = courses.filter((course) => {
-        const name = course.name.toLowerCase();
+    const productsResult = products.filter((product) => {
+        const name = product.name.toLowerCase();
         return name.includes(value);
     });
 
-    const result = coursesResult.map((course, index) => {
+    const result = productsResult.map((product, index) => {
         return `
         <tr>
             <td>${index}</td>
-            <td>${course.name}</td>
-            <td>${course.category}</td>
-            <td>${course.price}</td>
-            <td>${course.description}</td>
-            <td>${course.capacity}</td>
+            <td>${product.name}</td>
+            <td>${product.category}</td>
+            <td>${product.price}</td>
+            <td>${product.description}</td>
+            <td>            
+                <button class="btn btn-warning" onclick="editProduct(${index})">Update</button> 
+            </td>
             <td>
-                <button class='btn btn-danger' onclick='deleteCourse(${index})'>delete</button>
+                <button class='btn btn-danger' onclick='deleteproduct(${index})'>delete</button>
             </td>
         </tr>
         `;
@@ -217,3 +230,20 @@ search.addEventListener("input", (e) => {
 
     document.querySelector("#data").innerHTML = result;
 });
+//update
+function editProduct(index) {
+    const product = products[index];
+    productName.value = product.name;
+    productCategory.value = product.category;
+    productPrice.value = product.price;
+    productDescription.value = product.description;
+    addBtn.textContent = "Save Changes";
+    addBtn.classList.add("btn-warning");
+    addBtn.setAttribute("data-index", index);
+
+}
+
+
+
+
+
